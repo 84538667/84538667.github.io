@@ -218,6 +218,9 @@ pre>code {
         /* padding: 20px; */
         color:#C1C1A0;
     }
+    .p-post .post-title {
+        color: #375A7F
+    }
     .post {
         position: relative;
         margin: 1.9rem auto;
@@ -614,7 +617,6 @@ ul {
     font-size: 25px;
     letter-spacing: -1px;
     line-height: 1;
-    color: #fff;
    
 }
 @media screen and (max-width: 800px) {
@@ -2399,7 +2401,7 @@ p.hoverbawah {
   -webkit-font-smoothing: antialiased;
   cursor: text;
   position: relative; 
-  color: #EEE;
+  color: #9A9DB7;
 }
 
 .post h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
@@ -2426,12 +2428,12 @@ p.hoverbawah {
 
 .post h1 {
   font-size: 28px;
-  color: black; }
+  color: #A7ADE2; }
 
 .post h2 {
   font-size: 24px;
   border-bottom: 1px solid #cccccc;
-  color: black; }
+ }
 
 .post h3 {
   font-size: 18px; }
@@ -2654,4 +2656,9 @@ p.hoverbawah {
 }
 .post * {
     -webkit-print-color-adjust: exact;
+}
+
+
+.p-post .post-title a {
+    color: #A7ADE2
 }
