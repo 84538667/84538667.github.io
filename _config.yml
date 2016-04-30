@@ -22,8 +22,18 @@ gems:
 paginate: 5
 paginate_path: "page/:num"
 # Build settings
-markdown: redcarpet
+markdown: kramdown
 
+kramdown:
+  input: GFM
+  extensions:
+    - autolink
+    - footnotes
+    - smart
+  use_coderay: true
+  syntax_highlighter: rouge
+  coderay:
+    coderay_line_numbers:  nil
 
 # Archive
 jekyll-archives:
