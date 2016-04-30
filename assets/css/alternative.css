@@ -208,6 +208,16 @@ pre>code {
         font-size: 12px;
         color: #828282;
     }
+    .p-post{
+        position: relative;
+        margin: 1.9rem auto;
+        padding-bottom: 0;
+        /* border-bottom: #636363 1px solid; */
+        word-wrap: break-word;
+        background: #3E3E3E;
+        /* padding: 20px; */
+        color:#C1C1A0;
+    }
     .post {
         position: relative;
         margin: 1.9rem auto;
@@ -2360,10 +2370,6 @@ p.hoverbawah {
 .post {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
-  line-height: 1.6;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding: 30px; 
   color: #C1C1A0;
 }
 
@@ -2648,18 +2654,4 @@ p.hoverbawah {
 }
 .post * {
     -webkit-print-color-adjust: exact;
-}
-@media screen and (min-width: 914px) {
-    .post  {
-        width: 854px;
-        margin:0 auto;
-    }
-}
-@media print {
-    .post table, pre {
-        page-break-inside: avoid;
-    }
-    .post pre {
-        word-wrap: break-word;
-    }
 }
