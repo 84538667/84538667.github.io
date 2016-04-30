@@ -27,6 +27,7 @@ public class Singleton {
  }  
 }  
 ```
+
 - A、B线程同时进入了第一个if判断
 - A首先进入synchronized块，由于instance为null，所以它执行instance = new Singleton();
 - 由于new Singleton()操作非原子操作，jvm会执行三步操作
