@@ -4,7 +4,7 @@ title:  CAS原理
 date:   2016-04-30
 categories: concurrent
 tags:
-- concurrent
+- 并发
 - cas
 ---
 
