@@ -88,11 +88,12 @@ RR: remote read
 LW: local write  
 RW: remote read  
 
-前\操作\后  | M | E | S | I 
- M | LOCAL |  | RR | RW
- E | LW | LR | RR | RW
- S | LW |  | REMOTE | RW
- I | LW | LR(其他cache无) | LR(其他cache有) | REMOTE
+|前\操作\后  | M | E | S | I |
+|---|---|---|---|---|
+| M | LOCAL |  | RR | RW|
+| E | LW | LR | RR | RW|
+| S | LW |  | REMOTE | RW|
+| I | LW | LR(其他cache无) | LR(其他cache有) | REMOTE|
 
 ### CAS存在问题
 
