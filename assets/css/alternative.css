@@ -95,7 +95,6 @@ blockquote {
     color: #828282;
     border-left: 4px solid #e8e8e8;
     padding-left: 15px;
-    font-size: 18px;
     letter-spacing: -1px;
     font-style: italic;
 }
@@ -2520,7 +2519,7 @@ p.hoverbawah {
 .post blockquote {
   border-left: 4px solid #dddddd;
   padding: 0 15px;
-  color: #777777; }
+  color: #AFA5A5; }
 .post blockquote > :first-child {
     margin-top: 0; }
 .post blockquote > :last-child {
@@ -2618,7 +2617,7 @@ p.hoverbawah {
   padding: 0 5px;
   white-space: nowrap;
   border: 1px solid #eaeaea;
-  background-color: #f8f8f8;
+  background-color: #3E2B2B;
   border-radius: 3px; }
 
 .post pre code {
