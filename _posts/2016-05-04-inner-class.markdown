@@ -12,6 +12,9 @@ tags:
 内部类可为静态，可用protected和private修饰（而外部类只能使用public和缺省的包访问权限）。  
 内部类是个编译时的概念，一旦编译成功后，它就与外围类属于两个完全不同的类。对于一个名为OuterClass的外围类和一个名为InnerClass的内部类，在编译成功后，会出现这样两个class文件：OuterClass.class和OuterClass$InnerClass.class  
 内部类主要有以下几类：成员内部类、局部内部类、匿名内部类、静态内部类
+
+<!-- more -->
+
 ##### 1.成员内部类
 
 成员内部类：是外围类的一个成员

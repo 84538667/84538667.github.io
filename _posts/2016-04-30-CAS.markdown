@@ -8,7 +8,9 @@ tags:
 - cas
 ---
 
-##### CAS: compare and set，比较并交换，提供原子操作  
+### CAS: compare and set，比较并交换，提供原子操作  
+
+<!-- more -->
 
 ### JAVA CAS实例
 
