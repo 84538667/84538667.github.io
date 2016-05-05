@@ -26,10 +26,10 @@ exclude_from_nav: true
   <div class="archive-group">
     {% capture tag_name %}{{ tag | first }}{% endcapture %}
     <a name="{{ tag_name | slugize }}"></a>
-    <h3 id="#{{ tag_name | slugize }}" style="margin-top:-30px; padding-top:30px">#{{ tag_name }}</h3>
+    <h3 id="#{{ tag_name | slugize }}" style="margin-top:-20px; padding-top:30px">#{{ tag_name }}</h3>
     {% for post in site.tags[tag_name] %}
     <article class="archive-item tags-item">
-      <p><h4><a href="{{ root_url }}{{ post.url }}">{{post.title}}</a></h4></p>
+      <p><h4><a href="{{ root_url }}{{ post.url }}"><span>{{post.title}}</span></a></h4></p>
       <p class="tags-date">{{ post.date | date: "%b %-d, %Y" }}</p>
     </article>
     {% endfor %}
