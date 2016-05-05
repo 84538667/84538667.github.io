@@ -461,7 +461,7 @@ ul {
         position: absolute;
         top: 9px;
         right: 15px;
-        background-color: #fdfdfd;
+        background-color: #159494;
         border: 1px solid #e8e8e8;
         border-radius: 5px;
         text-align: right;
@@ -488,7 +488,7 @@ ul {
         padding-bottom: 5px;
         z-index: 999;
         position: relative;
-        background-color: #fdfdfd;
+        background-color: #159494;
     }
     .site-nav .page-link {
         display: block;
