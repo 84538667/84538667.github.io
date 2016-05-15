@@ -20,7 +20,7 @@ js中没有类的概念，不存在类的继承，而实现对象间的继承，
 
 先来看一个例子
 
-```
+``` javascrpit
 var v = {a:1, b:2};
 v.__proto__ = {b:3, c:4};
 console.log(v.a);
@@ -58,7 +58,7 @@ js的对象在查询一个属性的时候，如果当前对象没有的话就会
 现在来看原型链，原型链就是一个对象，然后它的原型，它的原型的原型，它的原型的原型的原型.....所形成的一个链。直到最后的对象的原型为null
 
 继续上面那个例子
-```
+``` javascrpit
 console.log(v.__proto__)
 console.log(v.__proto__.__proto__)
 console.log(v.__proto__.__proto__.__proto__)
@@ -84,7 +84,7 @@ __proto__属性才是每个对象才有的属性，而对于function来说,proto
 
 举个栗子
 
-```
+``` javascrpit
 function f(){};
 f.prototype.test = function(){
     console.log('test');
@@ -115,7 +115,7 @@ Object {a: "abc"} //下面为该对象展开属性
 
 当然，现在重写一下实例对象的`test`方法。继续上面的例子
 
-```
+``` javascrpit
 a.__proto__.test= function() {
     console.log('new test');
 }
@@ -133,11 +133,13 @@ new test
 那么我们在`new f()`的过程中发生了什么呢?  
 可以认为发生了如下三个过程.
 
-```
+``` javascrpit
 var a = new Object();
 a.__proto__ = f.prototype;
 f.call(a)
 ```
+
+所以，绝对不要修改`__proto__`,否则你永远不知道会发生什么!
 
 ### Object.getPrototypeOf
 
@@ -154,7 +156,8 @@ Object.getPrototypeOf(a) === a.__proto__
 true
 ```
 
-这个应该可以看出来了，`Object.getPrototypeOf`实际上就是拿出来一个对象的`__proto__`。
+这个应该可以看出来了，`Object.getPrototypeOf`实际上就是拿出来一个对象的`__proto__`。  
+obj.__proto__是获取某个对象的原型对象的非标准方法。而`Object.getPrototypeOf`则是在ES5中提供的标准方法。在某些环境中不一定支持`__proto__`，所以在真正使用时应优先使用这个方法。
 
 ### hasOwnProperty
 
@@ -164,7 +167,7 @@ true
 
 使用此方法查找对象的一个属性，将不会到原型上面去寻找。
 
-```
+``` javascrpit
 function f(){};
 f.prototype.test = function(){
     console.log('test');
