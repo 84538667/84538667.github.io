@@ -1,0 +1,196 @@
+---
+layout: post
+title:  js原型和原型链
+date:   2016-05-15
+categories: js
+tags:
+- js
+- 原型链
+---
+
+js中没有类的概念，不存在类的继承，而实现对象间的继承，使用的就是原型链。
+
+接下来看看js是如何急性原型继承的
+
+<!-- more -->
+
+### 原型
+
+##### 什么是原型
+
+先来看一个例子
+
+```
+var v = {a:1, b:2};
+v.__proto__ = {b:3, c:4};
+console.log(v.a);
+console.log(v.b);
+console.log(v.c);
+```
+输出
+
+```
+1
+2
+4
+```
+
+这里可以输出以下v，可以看到v里面有一个属性__proto__指向了另外一个对象，即`{b:3, c:4}`这个对象。
+
+```
+Object {a: 1, b: 2} //下面为该对象展开属性
+  a:1
+  b:2
+  __proto__:Object //下面为该对象展开属性
+    b:3
+    c:4
+    __proto__:Object
+```
+
+那么为什么这里直接输出 `v.c` 就可以得到 `v.__proto__.c`这个属性，而`v.b`就只能拿到`v.b`呢？
+
+这里面的`__proto__`就是v这个对象的原型对象，可以认为`v`继承了这个对象。所以就有了上述的输出。
+
+js的对象在查询一个属性的时候，如果当前对象没有的话就会去它的原型对象中查找，直到找到或查找到最后。
+
+### 原型链
+
+现在来看原型链，原型链就是一个对象，然后它的原型，它的原型的原型，它的原型的原型的原型.....所形成的一个链。直到最后的对象的原型为null
+
+继续上面那个例子
+```
+console.log(v.__proto__)
+console.log(v.__proto__.__proto__)
+console.log(v.__proto__.__proto__.__proto__)
+```
+输出
+```
+Object {b: 3, c: 4}
+Object {}
+null
+```
+
+所以我们刚刚创建的v对象的原型链是这个样子的
+
+```
+v --> ｛b:3, c:4} --> Object --> null
+```
+
+### prototype属性
+
+前面说了一大堆都是对象的`__proto__`属性，那么`prototype`又是什么东西呢?
+
+__proto__属性才是每个对象才有的属性，而对于function来说,prototype对应的原型属性，被称为原型对象
+
+举个栗子
+
+```
+function f(){};
+f.prototype.test = function(){
+    console.log('test');
+}
+f.prototype.a = 'abc'
+
+var a = new f();
+a.test();
+console.log(a.a);
+console.log(a.__proto__ === f.prototype)
+console.log(a.__proto__);
+```
+输出
+
+```
+test
+abc
+true
+Object {a: "abc"} //下面为该对象展开属性
+  a:"abc"
+  constructor:function f()
+  test:function ()
+  __proto__:Object
+```
+
+可以看到为`f`定义了一个`prototype`对象，其中包含了`a`、`test`两个属性，而使用该方法实例化的对象`a`的原型中，就包含了这两个属性。  
+即，由对应函数构造的对象中的会包含构造函数的`prototype`的属性和方法。
+
+当然，现在重写一下实例对象的`test`方法。继续上面的例子
+
+```
+a.__proto__.test= function() {
+    console.log('new test');
+}
+f.prototype.test();
+a.test();
+```
+输出
+
+```
+new test
+new test
+```
+
+可以看出，实际上`a.__proto__`就是`f.prototype`的一个引用。修改的话对应的方法的原型对象就会被修改。  
+那么我们在`new f()`的过程中发生了什么呢?  
+可以认为发生了如下三个过程.
+
+```
+var a = new Object();
+a.__proto__ = f.prototype;
+f.call(a)
+```
+
+### Object.getPrototypeOf
+
+Object.getPrototypeOf是什么呢？
+
+继续上面的例子
+
+```
+Object.getPrototypeOf(a) === a.__proto__
+```
+输出
+
+```
+true
+```
+
+这个应该可以看出来了，`Object.getPrototypeOf`实际上就是拿出来一个对象的`__proto__`。
+
+### hasOwnProperty
+
+上面已经说明了js中的原型链到底是什么东西，那么很显然，在js中获取一个对象的属性，特别是对象中不存在的属性，会在它自己，它的原型，它的原型的原型....上面一直找，直到找到为止。如果一个对象有特别长的原型链，那么很显然，会出现性能问题。
+
+于是有了另一个方法:`hasOwnProperty`
+
+使用此方法查找对象的一个属性，将不会到原型上面去寻找。
+
+```
+function f(){};
+f.prototype.test = function(){
+    console.log('test');
+}
+f.prototype.a = 'abc';
+
+var a = new f();
+a.b = 'bcd';
+a.newtest = function(){
+    console.log('new test');
+}
+console.log(a.hasOwnProperty('a'));
+console.log(a.hasOwnProperty('b'));
+console.log(a.hasOwnProperty('test'));
+console.log(a.hasOwnProperty('newtest'));
+```
+输出
+
+```
+false
+true
+false
+true
+```
+
+该方法是 JavaScript 中唯一一个只涉及对象自身属性而不会遍历原型链的方法。所以在性能要求很高的情况下，需要使用某个方法的话，可以使用这个来进行判断。
+
+
+_以上代码均运行于 Chrome Version 50.0.2661.102 (64-bit)_
