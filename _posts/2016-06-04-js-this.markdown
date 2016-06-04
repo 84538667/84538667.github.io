@@ -1,0 +1,280 @@
+---
+layout: post
+title:  js中的this
+date:   2016-06-04
+categories: js
+tags:
+- js
+---
+
+### this: js语言中的一个关键字，指向调用函数的那个对象
+
+<!-- more -->
+
+#### 1.先举个例子
+
+~~~
+name = "window";
+
+let xiaoming = {
+  name: "xiaoming",
+  getName: function() {
+    return this.name;
+  }
+};
+
+console.log(xiaoming.getName());  //xiaoming
+
+let getName = xiaoming.getName;
+
+console.log(getName());  //window
+~~~
+
+可以看到上面这个例子，可以看出来上面那句话，第一次调用方法，是`xiaoming`来调用的，所以 输出为 `xiaoming` 第二次`run()`虽然还是同一个方法，但是调用方变成了`window`，所以为`window`。
+
+例子稍微修改一下，就可以看到了，直接调用一个方法的话，`this==window`
+
+~~~
+name = "window";
+
+let xiaoming = {
+  name: "xiaoming",
+  getName: function() {
+    return this == window;
+  }
+};
+
+console.log(xiaoming.getName());  //false
+
+let getName = xiaoming.getName;
+
+console.log(getName());  //true
+~~~
+
+#### 2.和上面情况相反的
+
+
+~~~
+name = "window";
+
+let xiaoming = {
+  name: "xiaoming",
+};
+
+function getName(){
+  return this.name;
+}
+
+xiaoming.getName = getName;
+
+console.log(xiaoming.getName());  //xiaoming
+
+console.log(getName());  //window
+~~~
+
+这个情况和上面的情况其实是一样的，只是`getName`方法定义在了外面，结果和上面的情况也是一样的，谁调用了方法，`this`就是谁。
+
+#### 3.构造函数里面的情况
+
+~~~
+function People(name){
+	this.name = name;
+}
+
+let xiaoming = new People("xiaoming")
+
+console.log(xiaoming.name); //xiaoming
+~~~
+
+这里可以看出来，构造函数中的`this`指向new的那个对象了，这里没什么好说的，如果不用`new`操作符的话，那么就又变成了`window`
+
+
+~~~
+name="daming";
+
+function People(name){
+	this.name = name;
+}
+
+People("xiaoming");
+
+console.log(name);  //xiaoming
+~~~
+
+#### 4.call和apply的情况
+
+复制一下第二个例子,方法直接使用apply和call调用
+
+~~~
+name = "window";
+
+let xiaoming = {
+  name: "xiaoming",
+};
+
+function getName(){
+  return this.name;
+}
+
+console.log(getName.apply(xiaoming));  //xiaoming
+
+console.log(getName.apply());  //window
+
+console.log(getName.call(xiaoming));  //xiaoming
+
+console.log(getName.call());  //window
+~~~
+
+可以看出来，`call`和`apply`的作用就是把第一个参数当作方法中的`this`来使用。
+
+#### 5.bind下的情况
+
+
+~~~
+name = "window";
+
+let xiaoming = {
+  name: "xiaoming",
+};
+
+function getName(){
+  return this.name;
+}
+
+getName = getName.bind(xiaoming);
+
+console.log(getName());   //xiaoming
+~~~
+
+`bind`的作用就是返回一个改变了上下文的新的函数，在`bind(xiaoming)`后，`getName`的上下文就变成`xiaoming`了，这时这个方法中的`this`就相当于确定了，不会再改变。
+
+上面的代码之后运行这段代码:
+
+~~~
+let xiaohong = {
+  name: "xiaohong"
+}
+
+xiaohong.getName = getName;
+
+console.log(xiaohong.getName());  //xiaoming
+~~~
+
+可以看到输出还是小明，没有改变。
+
+#### 6.举几个复杂的例子
+
+例子1  
+
+~~~
+name = "window"
+
+let xiaoming = {  
+  name: "xiaoming",
+  getName: function() {
+    name = "xiaohong";  
+    function getName(){
+      return this.name;  
+    }  
+    return getName;  
+  }()
+}  
+
+console.log(xiaoming.getName());     //xiaoming
+console.log(xiaoming.name);          //xiaoming
+~~~
+
+例子2
+
+~~~
+name = "window"
+
+let xiaoming = {  
+  name: "xiaoming",
+  getName: function() {
+    name = "xiaohong";  
+    function getName(){ 
+      return this.name;  
+    }  
+    return getName();  
+  }
+}  
+
+console.log(xiaoming.getName());     //xiaohong
+console.log(xiaoming.name);          //xiaoming
+~~~
+
+例子3
+
+~~~
+name = "window"
+
+let xiaoming = {  
+  name: "xiaoming",
+  getName: function() {
+    this.name = "xiaohong";  
+    this.getName = function(){  
+      return this.name;  
+    }  
+    return this.getName();  
+  }
+}  
+
+console.log(xiaoming.getName());   //xiaohong
+console.log(xiaoming.name);        //xiaohong
+~~~
+
+例子4
+
+~~~
+name = "window"
+
+let xiaoming = {  
+  name: "xiaoming",
+  getName: function() {
+    this.name = "xiaohong"; 
+    function getName(){  
+      return this.name;  
+    };
+    return getName();  
+  }
+}  
+
+console.log(xiaoming.getName());   //window
+console.log(xiaoming.name);        //xiaohong
+~~~
+
+例子5
+
+~~~
+name = "window"
+
+let xiaoming = {  
+  name: "xiaoming",
+  getName: function() {
+    name = "xiaohong";  
+    this.getName = function(){  
+      return this.name;  
+    }  
+    return this.getName();  
+  }
+}  
+
+console.log(xiaoming.getName());   //xiaoming
+console.log(xiaoming.name);        //xiaoming
+~~~
+
+上面5个例子看懂了吗?是不是已经彻底绕晕了，哈哈哈，记住方法直接调用的话，`this`指向window就好了
+
+#### 7. 严格模式下，方法调用this为undifiend，不是window
+
+~~~
+name = "window"
+function getName() {
+    "use strict";
+    console.log( this.name );  //Uncaught TypeError: Cannot read property 'name' of undefined
+}
+getName()
+~~~
+
+以上，就是我对`js`的`this`的乱七八糟的总结了，最后还要总结一句:__this指向调用函数的那个对象__
