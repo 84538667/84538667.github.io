@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  expect命令
-date:   2016-02-09
+date:   2017-02-09
 categories: shell
 tags:
 - expect
