@@ -1,0 +1,123 @@
+---
+layout: post
+title:  expect命令
+date:   2016-02-09
+categories: shell
+tags:
+- expect
+- shell
+---
+
+### 说一下spawn和expect两个shell命令
+
+<!-- more -->
+半年前写了一个shell脚本，一台服务器向多台服务器分发文件，对shell一点都不熟，后来就发现了这个命令：expect，通过这个命令搞定了这个脚本
+
+已经好久没有写东西了，感觉挺对不起我自己的，找个时间写点东西，顺便说一下这两个东西，因为马上就要忘了。
+
+
+### expect  
+
+expect是一个脚本，作用就是能够代替我们与shell进行交互。可以完成输入密码这种命令。
+
+找一个最直接的例子:
+
+test.sh:
+
+~~~
+#!/usr/bin/expect
+spawn ssh admin@yitaifuwuqi "ls"
+expect {
+        "(yes/no)?"
+                {
+                        send "yes\n"
+                        expect "*assword:" {send "$password\n"}
+                }
+        "*assword:"
+                {
+                        send "1234567890\n"
+                }
+}
+expect eof
+~~~
+
+执行 `expect test.sh`
+
+输出:
+
+~~~
+spawn ssh admin@10.244.37.143 ls
+admin@10.244.37.143's password:
+a
+b
+...(后面就不列出来了)
+~~~
+
+可以看到这边密码自动就输入了,并且执行了ls这个命令
+
+下面分析一下上面的代码
+
+- spawn
+    - spawn是expect的内部命令，和shell没关系，只有expect环境下可以使用
+    - spawn作用就是用来启动新的进程的
+- expect
+    - 这个expect和spawn一样，也是expect的内部命令
+    - 这个命令是用来与shell交互的，作用是判断上面命令的输出的
+    - 后面的大括号表示分支
+- send
+    - send也是expect的内部命令，用来与shell交互
+    - 将后面那段字符串打印到shell中，实现输入
+    - 与expect连用，表示如果遇到了expect后面的字符串，就send后面的字符串
+- interact
+    - 保留交互，这里面没用到，下面举例
+
+~~~
+#!/usr/bin/expect
+spawn ssh admin@ yitaifuwuqi
+expect {
+        "(yes/no)?"
+                {
+                        send "yes\n"
+                        expect "*assword:" {send "$password\n"}
+                }
+        "*assword:"
+                {
+                        send "1234567890\n"
+                }
+}
+interact
+~~~
+
+运行的结果就是呆在那个服务器上，并且保留会话，相当于实现了免登
+
+以上就是expect的简单用法，更复杂的用法没有研究过。
+
+#### 下面说一下我写的服务器分发文件的思路，方法比较蠢，就当作一个总结了
+
+##### 情景：
+
+有1台服务器a和10台服务器b
+
+a服务器上面有一些文件要推送到b服务器上
+
+没有admin账号但是个人账号可以sudo admin
+
+
+##### 我实现的方式：
+
+首先每个b服务器上面写一段脚本，使用expect到a服务器sudo scp文件
+
+a服务器上脚本，读取全部b服务器的ip列表，然后每个ip ssh上去执行这一段脚本
+
+文件和密码作为输入
+
+所实现的推送 实际上是  a脚本调用b服务器脚本拉去a服务器文件
+
+
+### 题外话
+
+执行sudo的时候有个命令，这边也记录一下
+
+~~~
+echo $password | sudo -S mkdir aaa
+~~~
