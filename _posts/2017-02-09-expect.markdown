@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  expect命令
-date:   2017-02-09
+title:  spawn,expect命令
+date:   2016-02-09
 categories: shell
 tags:
+- spawn
 - expect
 - shell
 ---
@@ -11,7 +12,7 @@ tags:
 ### 说一下spawn和expect两个shell命令
 
 <!-- more -->
-半年前写了一个shell脚本，一台服务器向多台服务器分发文件，对shell一点都不熟，后来就发现了这个命令：expect，通过这个命令搞定了这个脚本
+半年前写了一个shell脚本，一台服务器向多台服务器分发文件，由于啥都不会，就一顿乱写，后来就发现了这么两个命令：spawn，expect，通过这两个命令搞定了这个脚本
 
 已经好久没有写东西了，感觉挺对不起我自己的，找个时间写点东西，顺便说一下这两个东西，因为马上就要忘了。
 
@@ -70,9 +71,12 @@ b
     - 与expect连用，表示如果遇到了expect后面的字符串，就send后面的字符串
 - interact
     - 保留交互，这里面没用到，下面举例
+- set password [lindex $argv 0]
+    - 参数设置，下面例子中有
 
 ~~~
 #!/usr/bin/expect
+set password [lindex $argv 0] #获取第1个参数设为password
 spawn ssh admin@ yitaifuwuqi
 expect {
         "(yes/no)?"
@@ -82,7 +86,7 @@ expect {
                 }
         "*assword:"
                 {
-                        send "1234567890\n"
+                        send "$passowrd\n"
                 }
 }
 interact
